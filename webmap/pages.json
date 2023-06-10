@@ -1,0 +1,14 @@
+{
+    "9c81205bc30488fbfa11327af626ef86": {
+        "page_script_hash": "9c81205bc30488fbfa11327af626ef86",
+        "page_name": "Login",
+        "icon": "",
+        "script_path": "C:\\Users\\HP\\Desktop\\webmap\\Login.py"
+    },
+    "b351661a3f859599b98cad6129c37db1": {
+        "page_script_hash": "b351661a3f859599b98cad6129c37db1",
+        "page_name": "Home",
+        "icon": "",
+        "script_path": "C:\\Users\\HP\\Desktop\\webmap\\pages\\Home.py"
+    }
+}
