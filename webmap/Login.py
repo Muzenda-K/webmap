@@ -5,6 +5,8 @@ from pathlib import Path
 import json
 from streamlit.source_util import _on_pages_changed, get_pages
 from streamlit_extras.switch_page_button import switch_page
+import traceback
+import logging
 
 # Firebase configuration keys
 firebaseConfig = {
@@ -109,13 +111,15 @@ def main():
         password = st.text_input("Password", type="password")
 
         if st.checkbox("Login"):
-            user = auth.sign_in_with_email_and_password(email,password)
+            try:
+                user = auth.sign_in_with_email_and_password(email,password)
 
-            if  user:
-                st.session_state["logged_in"] = True
-                st.success("Logged In as {}".format(email))
-            else:
-                st.warning("Incorrect Username/Password")
+                if  user:
+                    st.session_state["logged_in"] = True
+                    st.success("Logged In as {}".format(email))    
+            except Exception as e:
+                st.warning('Incorrect login details')         
+
     elif choice == "SignUp":
         st.write("-----")
         st.subheader("Create New Account")
