@@ -5,7 +5,7 @@ import geopandas as gpd
 from  matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import plotly.express as px
-from Login import clear_all_but_first_page
+
 
 # Title of the page
 st.title('Yield Mapping')
@@ -13,16 +13,10 @@ st.subheader('Yield Graphs')
 
 # side bar
 with st.sidebar:
-    # logout button
-    logout_btn = st.button('Log out', on_click=clear_all_but_first_page())
-
-    # Horizontal line
     st.markdown("---")
-
     # Naming the current page
-    st.markdown("## Maps page")
+    st.markdown("# Maps page")
     
-
 # Upload yield file for analysis
 global file
 try: 
@@ -57,11 +51,11 @@ if file is not None:
     x_axis = df[x_column]
     y_axis = df[y_column]
 
-    # User input for graphs
-    col1, col2, col3 = st.columns(3)
-    chart_name = col1.text_input('Give your graph a name')
-    xlabel = col2.text_input('Label for x-axis')
-    ylabel = col3.text_input('Label for y-axis')
+    # # User input for graphs
+    # col1, col2, col3 = st.columns(3)
+    # chart_name = col1.text_input('Give your graph a name')
+    # xlabel = col2.text_input('Label for x-axis')
+    # ylabel = col3.text_input('Label for y-axis')
 
 
     # Graphs panel
@@ -120,7 +114,7 @@ if file is not None:
     with tab3:
         # Draw a histogram
         try:
-            fig = px.histogram(df, x=y_column, labels={'value': ylabel, "variable": xlabel})
+            fig = px.histogram(df, x=y_column)
             st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
             # Download the graph
@@ -143,7 +137,7 @@ if file is not None:
     with tab4:
         # Draw a box plot
         try:
-            fig = px.box(y_axis, labels={'value': ylabel})
+            fig = px.box(y_axis)
             st.plotly_chart(fig,  use_container_width=True)
 
             # Download the graph
@@ -174,7 +168,7 @@ st.subheader('Maps Panel')
 if file is not None:
     columns = df.columns.values.tolist()
     yield_values = st.sidebar.selectbox("Select Yield Column", columns, key='yield_column')
-    tab1, tab2, tab3, tab4 = st.tabs(["Boundary Map", "Raw Map", "Normalised Map", "NullValues"])
+    tab1, tab2, tab3= st.tabs(["Boundary Map", "Raw Map", "Normalised Map"])
 
     with tab1:
         try:
@@ -278,40 +272,5 @@ if file is not None:
                 # Display Map
                 st.pyplot()
             except Exception as e:
-                st.warning(e)
+                st.warning("Make sure yu selected the yield field from your file!")
 
-    with tab4: 
-        try:
-            df.plot(
-            column=yield_values,
-            legend=True,
-            scheme="quantiles",
-            figsize=(15, 10),
-            missing_kwds={
-                "color": "lightgrey",
-                "edgecolor": "red",
-                "hatch": "///",
-                "label": "Missing values",
-            },
-            )
-
-            # Download the graph
-            # Create an in-memory buffer
-            buffer = io.BytesIO()
-                
-            # Save the figure as a pdf to the buffer
-            plt.savefig(buffer, format="png")
-
-            # Download the pdf from the buffer
-            st.download_button(
-                label="Download Map",
-                data=buffer,
-                file_name="Normalised.png",
-                mime="image/png",
-                    )
-                
-             
-            # Display Map
-            st.pyplot()
-        except Exception as e:
-            st.warning('Something went wrong')
